@@ -1,3 +1,3 @@
 # Code for Free Mart, hosted with Heroku
 
-### [Link to website](freemart.herokuapp.com)
+### [Link to website](https://freemart.herokuapp.com/)
