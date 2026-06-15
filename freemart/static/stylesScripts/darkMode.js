@@ -1,8 +1,8 @@
 /* darkMode functions definition */
 function getCookie(cname) {
-  var mode = document.cookie;
-  var modeValue = mode.split('=')[1];
-  return modeValue;
+  const parts = document.cookie.split(`; ${cname}=`);
+  if (parts.length == 2) return parts[1].split('=');
+	return null;
 }
 
 
@@ -28,6 +28,7 @@ function switchDarkMode() {
   } else {
     switchToDarkMode();
   }
+console.log(getCookie("theme"))
 }
 
 
