@@ -28,7 +28,6 @@ function switchDarkMode() {
   } else {
     switchToDarkMode();
   }
-console.log(getCookie("theme"))
 }
 
 
