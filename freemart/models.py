@@ -39,6 +39,7 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Product')
     messages = db.relationship('Message')
     lastquiz = db.Column(db.String, nullable=False, default=yesterdayUTC)
+    quizQuestions = db.Column(db.String, nullable=True)
     sale_count = db.Column(db.Integer, nullable=False, default=0)
     confirmed = db.Column(db.Boolean, nullable=False, default=False)
 

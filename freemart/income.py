@@ -1,10 +1,16 @@
 # Importing 3rd party components
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, flash, render_template, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
 
 from datetime import datetime
 
 from decimal import Decimal
+
+import urllib
+
+import requests
+
+import json
 
 # Importing freemart component
 from . import db
@@ -37,7 +43,23 @@ def quiz_page():
     difference = currentTime - lastTime
 
     if difference.days >= 1: 
-        questionForm = QuizForm()
+        if (not current_user.quizQuestions):
+            response = requests.get("https://opentdb.com/api.php?amount=3&category=9&difficulty=medium&type=boolean&encode=url3986")
+            raw = response.json()
+            
+            if (raw["response_code"] != 0):
+                flash("Unable to fetch quiz questions", category='error')
+                return redirect(url_for("user.profile_page", username=current_user.username))
+
+            questions = [[urllib.parse.unquote(question["question"]), question["correct_answer"]] for question in raw['results']]
+
+            current_user.quizQuestions = json.dumps(questions)
+            db.session.commit()
+        else:
+            questions = json.loads(current_user.quizQuestions)
+
+        questionForm = QuizForm(questions)
+
         if questionForm.validate_on_submit():
             current_user.lastquiz = currentTime
             answers = [questionForm.qOne.data, questionForm.qTwo.data, questionForm.qThree.data]
